@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloom &amp; Co. — Fresh Flowers &amp; Local Delivery</title>
+    <meta name="description" content="Locally arranged fresh flowers, bouquets, and plants with same-day delivery across Hamilton.">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- ===== Header / Nav ===== -->
+    <header class="site-header" id="top">
+        <div class="wrap nav">
+            <a href="#top" class="brand">
+                <span class="brand-mark" aria-hidden="true">&#10047;</span>
+                <span class="brand-name">Bloom&nbsp;&amp;&nbsp;Co.</span>
+            </a>
+            <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">&#9776;</button>
+            <nav class="nav-links" id="navLinks" aria-label="Primary">
+                <a href="#shop">Shop</a>
+                <a href="#custom">Custom Orders</a>
+                <a href="#about">About</a>
+                <a href="#delivery">Delivery</a>
+                <a href="#contact">Contact</a>
+            </nav>
+            <button class="cart-btn" id="cartBtn" aria-label="Open cart">
+                &#128722;
+                <span class="cart-count" id="cartCount" hidden>0</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ===== Hero ===== -->
+    <section class="hero">
+        <div class="wrap hero-inner">
+            <p class="eyebrow">Locally arranged in Hamilton, Ontario</p>
+            <h1>Fresh blooms, delivered to your door.</h1>
+            <p class="lede">Hand-tied bouquets, seasonal arrangements, and house plants — made fresh daily and delivered across the city, often same&#8209;day.</p>
+            <div class="hero-actions">
+                <a class="btn btn-primary" href="#shop">Shop bouquets</a>
+                <a class="btn btn-ghost" href="#custom">Request a custom order</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Trust badges ===== -->
+    <section class="badges wrap">
+        <div class="badge"><span aria-hidden="true">&#127793;</span><div><b>Locally sourced</b><small>Fresh from regional growers</small></div></div>
+        <div class="badge"><span aria-hidden="true">&#128666;</span><div><b>Same-day delivery</b><small>Order before 1pm, Mon–Sat</small></div></div>
+        <div class="badge"><span aria-hidden="true">&#9997;</span><div><b>Custom arrangements</b><small>Built for your occasion</small></div></div>
+    </section>
+
+    <!-- ===== Shop ===== -->
+    <section id="shop" class="section">
+        <div class="wrap">
+            <div class="section-head">
+                <h2>Shop our collection</h2>
+                <p>Pick a ready-made favourite, or filter by occasion.</p>
+            </div>
+            <div class="filters" id="filters" role="tablist" aria-label="Product categories"></div>
+            <div class="product-grid" id="productGrid"></div>
+        </div>
+    </section>
+
+    <!-- ===== Custom order CTA ===== -->
+    <section id="custom" class="section section-tint">
+        <div class="wrap custom-cta">
+            <div>
+                <h2>Something special in mind?</h2>
+                <p>Weddings, sympathy, corporate, or a one-of-a-kind gift — tell us your colours, budget, and date and we’ll design it for you.</p>
+            </div>
+            <a class="btn btn-primary" href="#contact">Start a custom order</a>
+        </div>
+    </section>
+
+    <!-- ===== About ===== -->
+    <section id="about" class="section">
+        <div class="wrap about-grid">
+            <div>
+                <h2>About Bloom &amp; Co.</h2>
+                <p>We’re a small, family-run florist studio creating fresh arrangements by hand every morning. From a single stem to a full event, every order is made with locally grown flowers and delivered with care across Hamilton and the surrounding area.</p>
+                <p>Have a question? Reach out any time — we love helping you find exactly the right blooms.</p>
+            </div>
+            <div class="about-art" aria-hidden="true"></div>
+        </div>
+    </section>
+
+    <!-- ===== Delivery ===== -->
+    <section id="delivery" class="section section-tint">
+        <div class="wrap delivery-grid">
+            <div class="info-card"><h3>Areas</h3><p>Hamilton, Dundas, Ancaster, Stoney Creek, Waterdown. Outside these areas? Just ask.</p></div>
+            <div class="info-card"><h3>Fees &amp; timing</h3><p>Flat $12 delivery, or free over $75. Same-day on orders placed before 1pm, Monday–Saturday.</p></div>
+            <div class="info-card"><h3>Pickup</h3><p>Prefer to pick up? Choose “Pickup” at checkout and collect from our studio, free of charge.</p></div>
+        </div>
+    </section>
+
+    <!-- ===== Contact / Footer ===== -->
+    <footer id="contact" class="site-footer">
+        <div class="wrap footer-grid">
+            <div>
+                <a href="#top" class="brand brand--footer">
+                    <span class="brand-mark" aria-hidden="true">&#10047;</span>
+                    <span class="brand-name">Bloom&nbsp;&amp;&nbsp;Co.</span>
+                </a>
+                <p class="muted">Fresh flowers &amp; local delivery,<br>Hamilton, Ontario.</p>
+            </div>
+            <div>
+                <h4>Visit / Contact</h4>
+                <p class="muted">123 Locke Street S, Hamilton<br>
+                <a href="tel:+19055550123">(905) 555-0123</a><br>
+                <a href="mailto:hello@bloomco.example">hello@bloomco.example</a></p>
+            </div>
+            <div>
+                <h4>Hours</h4>
+                <p class="muted">Mon–Fri: 9am – 6pm<br>Sat: 9am – 5pm<br>Sun: Closed</p>
+            </div>
+        </div>
+        <div class="wrap footer-bottom">
+            <small>&copy; <span id="year"></span> Bloom &amp; Co. — Demo template by <a href="#">Your Studio</a>. Placeholder photography via <a href="https://www.pexels.com" target="_blank" rel="noopener">Pexels</a>.</small>
+        </div>
+    </footer>
+
+    <!-- ===== Cart drawer ===== -->
+    <div class="drawer-overlay" id="drawerOverlay" hidden></div>
+    <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping cart" aria-hidden="true">
+        <div class="cart-drawer-head">
+            <h3>Your cart</h3>
+            <button class="icon-btn" id="cartClose" aria-label="Close cart">&times;</button>
+        </div>
+        <div class="cart-items" id="cartItems"></div>
+        <div class="cart-foot" id="cartFoot">
+            <div class="cart-line"><span>Subtotal</span><span id="cartSubtotal">$0.00</span></div>
+            <div class="cart-line"><span>Delivery</span><span id="cartDelivery">$0.00</span></div>
+            <div class="cart-line cart-total"><span>Total</span><span id="cartTotal">$0.00</span></div>
+            <button class="btn btn-primary btn-block" id="checkoutBtn">Checkout</button>
+        </div>
+    </aside>
+
+    <!-- ===== Checkout modal ===== -->
+    <div class="modal" id="checkoutModal" aria-hidden="true">
+        <div class="modal-card">
+            <button class="icon-btn modal-close" id="checkoutClose" aria-label="Close">&times;</button>
+            <div id="checkoutBody">
+                <h3>Checkout</h3>
+                <form id="checkoutForm" class="form">
+                    <div class="field"><label>Full name<input name="name" required></label></div>
+                    <div class="field-row">
+                        <div class="field"><label>Email<input type="email" name="email" required></label></div>
+                        <div class="field"><label>Phone<input type="tel" name="phone" required></label></div>
+                    </div>
+                    <div class="field">
+                        <label>Fulfilment
+                            <select name="fulfilment" id="fulfilment">
+                                <option value="delivery">Delivery (+$12, free over $75)</option>
+                                <option value="pickup">Pickup (free)</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="field" id="addressField"><label>Delivery address<input name="address"></label></div>
+                    <div class="field-row">
+                        <div class="field"><label>Date<input type="date" name="date" required></label></div>
+                        <div class="field">
+                            <label>Payment
+                                <select name="payment">
+                                    <option value="paypal">PayPal / Card</option>
+                                    <option value="etransfer">Interac e-Transfer</option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="field"><label>Gift message (optional)<textarea name="message" rows="2"></textarea></label></div>
+                    <div class="cart-line cart-total"><span>Order total</span><span id="checkoutTotal">$0.00</span></div>
+                    <button type="submit" class="btn btn-primary btn-block">Place order</button>
+                    <p class="fineprint">This is a demo. No real payment is processed — see the note after placing your order for how live payments (Stripe / PayPal) plug in.</p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== Toast ===== -->
+    <div class="toast" id="toast" hidden></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
