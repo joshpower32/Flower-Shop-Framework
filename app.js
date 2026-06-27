@@ -14,6 +14,11 @@ const SHOP = {
   deliveryFee: 12,
   freeDeliveryOver: 75,
   etransferEmail: "payments@bloomco.example",
+  ownerEmail: "hello@bloomco.example",
+  // === ORDER DELIVERY (set before selling) — free key at https://web3forms.com
+  // Enter the client's email, paste the key here. Each placed order then emails
+  // the client the full order details. Leave as-is in the demo.
+  web3formsKey: "YOUR_WEB3FORMS_ACCESS_KEY",
   paypalLink: "https://www.paypal.com/paypalme/yourbusiness", // ← client's PayPal.Me / Payment Link
   // Free demo photos via Pexels. Get your own key at https://www.pexels.com/api/
   // These are PLACEHOLDERS — set a product's `image:` field to a real Canon photo
@@ -266,10 +271,36 @@ fulfilmentSel.addEventListener("change", () => {
 
 checkoutForm.addEventListener("submit", (e) => { e.preventDefault(); placeOrder(new FormData(checkoutForm)); });
 
+// Email the full order to the shop owner via Web3Forms (when a key is set).
+async function sendOrderEmail(data, total) {
+  if (!SHOP.web3formsKey || SHOP.web3formsKey === "YOUR_WEB3FORMS_ACCESS_KEY") return;
+  const itemsText = cart.map((l) => {
+    const opts = [l.size && l.size !== "Standard" ? l.size : null, l.color && l.color !== "As pictured" ? l.color : null].filter(Boolean).join(", ");
+    return `• ${l.qty} x ${l.name}${opts ? ` (${opts})` : ""} — ${fmt(l.unitPrice)} each` +
+      `${l.recipient ? ` | For: ${l.recipient}` : ""}${l.address ? ` | Deliver to: ${l.address}` : ""}${l.note ? ` | Note: ${l.note}` : ""}`;
+  }).join("\n");
+  const fd = new FormData();
+  fd.append("access_key", SHOP.web3formsKey);
+  fd.append("subject", `🛒 NEW ORDER — ${data.get("name") || "website"} (${fmt(total)})`);
+  fd.append("from_name", "Bloom & Co. website");
+  fd.append("Customer", data.get("name") || "");
+  fd.append("Email", data.get("email") || "");
+  fd.append("Phone", data.get("phone") || "");
+  fd.append("Fulfilment", data.get("fulfilment") || "");
+  fd.append("Address", data.get("address") || "");
+  fd.append("Requested date", data.get("date") || "");
+  fd.append("Payment method", data.get("payment") || "");
+  fd.append("Gift message", data.get("message") || "");
+  fd.append("Order", itemsText);
+  fd.append("Order total", fmt(total));
+  try { await fetch("https://api.web3forms.com/submit", { method: "POST", headers: { Accept: "application/json" }, body: fd }); } catch (_) {}
+}
+
 function placeOrder(data) {
   const sub = cartSubtotal();
   const total = sub + deliveryFee(sub, data.get("fulfilment"));
   const payment = data.get("payment");
+  sendOrderEmail(data, total); // notify the shop owner (when a Web3Forms key is set)
 
   // === LIVE PAYMENTS PLUG IN HERE =====================================
   // Replace the confirmation below with a real handoff, e.g.:

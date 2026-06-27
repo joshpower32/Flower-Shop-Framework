@@ -32,3 +32,14 @@ python3 -m http.server 5510   # then open http://localhost:5510
 - For real orders + inventory, wire the catalogue and orders to **Firebase** (Firestore),
   mirroring the YMCA dashboard project's pattern.
 - Hosting upgrade path for paying clients: Netlify / Cloudflare Pages + a custom domain.
+
+## Selling this site to a client (order delivery)
+
+When an order is placed, the full order (items, options, customer details, total) emails the client via **Web3Forms**, alongside the existing PayPal / e-Transfer instructions.
+
+1. Get a FREE key at [web3forms.com](https://web3forms.com) using the **client's email**.
+2. Paste it into `SHOP.web3formsKey` in `app.js`; set `SHOP.ownerEmail` and `SHOP.etransferEmail` to the client's details too.
+3. Set `SHOP.paypalLink` to the client's PayPal.Me / Stripe Payment Link for real payments.
+4. Place a test order on the live site and confirm the `🛒 NEW ORDER` email arrives.
+
+Free tier = 250 submissions/month per key.
