@@ -77,21 +77,24 @@ function stockTag(p) {
 // Fetch a placeholder photo per product from Pexels, cache it, and swap it in
 // over the SVG once loaded. Gracefully no-ops if offline or the API fails.
 async function hydratePexelsImages() {
-  for (const p of PRODUCTS) {
-    if (productImage(p)) continue; // already have a Canon photo or cached one
+  // Fetch all product photos in PARALLEL so they appear together in ~1s
+  // instead of trickling in one-by-one over many seconds.
+  await Promise.all(PRODUCTS.map(async (p) => {
+    if (productImage(p)) return; // already have a Canon photo or cached one
     try {
       const res = await fetch(
         `https://api.pexels.com/v1/search?query=${encodeURIComponent(p.query)}&per_page=1&orientation=landscape`,
         { headers: { Authorization: SHOP.pexelsKey } }
       );
-      if (!res.ok) continue;
+      if (!res.ok) return;
       const photo = (await res.json()).photos?.[0];
-      if (!photo) continue;
-      imgCache[p.id] = { url: photo.src.large, photographer: photo.photographer };
+      if (!photo) return;
+      // medium (~350px) is plenty for a card and a fraction of large's weight
+      imgCache[p.id] = { url: photo.src.medium, photographer: photo.photographer };
       localStorage.setItem(IMG_CACHE_KEY, JSON.stringify(imgCache));
       updateCardMedia(p);
     } catch (_) { /* keep the SVG fallback */ }
-  }
+  }));
   updateCartUI(); // refresh any cart thumbnails with the new photos
 }
 
