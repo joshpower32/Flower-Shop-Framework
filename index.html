@@ -34,23 +34,24 @@
     </header>
 
     <!-- ===== Hero ===== -->
-    <section class="hero">
+    <section class="hero" id="hero">
         <div class="wrap hero-inner">
             <p class="eyebrow">Locally arranged in Hamilton, Ontario</p>
-            <h1>Fresh blooms, delivered to your door.</h1>
+            <h1>Fresh flowers, delivered to your door.</h1>
             <p class="lede">Hand-tied bouquets, seasonal arrangements, and house plants — made fresh daily and delivered across the city, often same&#8209;day.</p>
             <div class="hero-actions">
                 <a class="btn btn-primary" href="#shop">Shop bouquets</a>
-                <a class="btn btn-ghost" href="#custom">Request a custom order</a>
+                <button class="btn btn-ghost" type="button" data-custom-open>Request a custom order</button>
             </div>
+            <div class="hero-dots" id="heroDots" aria-label="Change background photo"></div>
         </div>
     </section>
 
     <!-- ===== Trust badges ===== -->
     <section class="badges wrap">
-        <div class="badge"><span aria-hidden="true">&#127793;</span><div><b>Locally sourced</b><small>Fresh from regional growers</small></div></div>
-        <div class="badge"><span aria-hidden="true">&#128666;</span><div><b>Same-day delivery</b><small>Order before 1pm, Mon–Sat</small></div></div>
-        <div class="badge"><span aria-hidden="true">&#9997;</span><div><b>Custom arrangements</b><small>Built for your occasion</small></div></div>
+        <button class="badge" type="button" data-target="#about" aria-label="Locally sourced — about us"><span aria-hidden="true">&#127793;</span><div><b>Locally sourced</b><small>Fresh from regional growers</small></div></button>
+        <button class="badge" type="button" data-target="#delivery" aria-label="Same-day delivery — delivery info"><span aria-hidden="true">&#128666;</span><div><b>Same-day delivery</b><small>Order before 1pm, Mon–Sat</small></div></button>
+        <button class="badge" type="button" data-custom-open aria-label="Custom arrangements — build a custom order"><span aria-hidden="true">&#9997;</span><div><b>Custom arrangements</b><small>Built for your occasion</small></div></button>
     </section>
 
     <!-- ===== Shop ===== -->
@@ -72,7 +73,7 @@
                 <h2>Something special in mind?</h2>
                 <p>Weddings, sympathy, corporate, or a one-of-a-kind gift — tell us your colours, budget, and date and we’ll design it for you.</p>
             </div>
-            <a class="btn btn-primary" href="#contact">Start a custom order</a>
+            <button class="btn btn-primary" type="button" data-custom-open>Start a custom order</button>
         </div>
     </section>
 
@@ -177,6 +178,22 @@
                     <p class="fineprint">This is a demo. No real payment is processed — see the note after placing your order for how live payments (Stripe / PayPal) plug in.</p>
                 </form>
             </div>
+        </div>
+    </div>
+
+    <!-- ===== Product detail modal ===== -->
+    <div class="modal" id="productModal" aria-hidden="true">
+        <div class="modal-card modal-card--wide">
+            <button class="icon-btn modal-close" id="productClose" aria-label="Close">&times;</button>
+            <div id="productModalBody"></div>
+        </div>
+    </div>
+
+    <!-- ===== Custom order modal ===== -->
+    <div class="modal" id="customModal" aria-hidden="true">
+        <div class="modal-card modal-card--wide">
+            <button class="icon-btn modal-close" id="customClose" aria-label="Close">&times;</button>
+            <div id="customModalBody"></div>
         </div>
     </div>
 

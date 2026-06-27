@@ -76,11 +76,19 @@ h1, h2, h3, h4 { font-family: var(--font-head); font-weight: 600; line-height: 1
 .nav-toggle { display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--ink); margin-left: auto; }
 
 /* ---------- Hero ---------- */
-.hero { background: radial-gradient(120% 120% at 80% 0%, var(--brand-soft) 0%, var(--tint) 45%, var(--bg) 100%); padding: 86px 0 72px; }
-.hero-inner { max-width: 640px; }
-.hero h1 { font-size: clamp(2.1rem, 5vw, 3.4rem); margin: 0 0 .5rem; }
+.hero { position: relative; background: linear-gradient(135deg, var(--brand-dark), #5a2942); background-size: cover; background-position: center; padding: 104px 0 92px; color: #fff; transition: background-image .4s ease; }
+.hero-inner { max-width: 640px; position: relative; }
+.hero .eyebrow { color: #f6dde8; }
+.hero h1 { font-size: clamp(2.1rem, 5vw, 3.4rem); margin: 0 0 .5rem; color: #fff; text-shadow: 0 2px 16px rgba(0,0,0,.3); }
+.hero .lede { font-size: 1.15rem; color: rgba(255,255,255,.92); margin: 0 0 1.6rem; text-shadow: 0 1px 10px rgba(0,0,0,.25); }
 .lede { font-size: 1.15rem; color: var(--muted); margin: 0 0 1.6rem; }
 .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.hero .btn-ghost { color: #fff; border-color: rgba(255,255,255,.65); background: rgba(255,255,255,.08); }
+.hero .btn-ghost:hover { background: rgba(255,255,255,.2); }
+.hero-dots { display: flex; gap: 9px; margin-top: 26px; }
+.hero-dots button { width: 12px; height: 12px; padding: 0; border-radius: 50%; border: 2px solid rgba(255,255,255,.75); background: transparent; cursor: pointer; transition: background .15s ease, transform .15s ease; }
+.hero-dots button:hover { transform: scale(1.15); }
+.hero-dots button.active { background: #fff; }
 
 /* ---------- Trust badges ---------- */
 .badges { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: -34px auto 0; position: relative; }
@@ -207,3 +215,33 @@ h1, h2, h3, h4 { font-family: var(--font-head); font-weight: 600; line-height: 1
 @media (max-width: 460px) {
     .field-row { grid-template-columns: 1fr; }
 }
+
+/* ---------- Clickable badges ---------- */
+.badge { font: inherit; text-align: left; width: 100%; cursor: pointer; transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease; }
+.badge:hover, .badge:focus-visible { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--brand); outline: none; }
+
+/* ---------- Clickable product cards ---------- */
+.product-card[data-open] { cursor: pointer; }
+.product-card.is-out { opacity: .6; }
+.ci-opts { color: var(--muted); font-size: .78rem; line-height: 1.35; }
+
+/* ---------- Product / custom detail modal ---------- */
+.modal-card--wide { width: min(680px, 100%); padding: 0; overflow: hidden; }
+.modal-card--wide .modal-close { background: rgba(255,255,255,.92); border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; z-index: 3; box-shadow: var(--shadow-sm); }
+.pm-media { aspect-ratio: 16 / 9; background: var(--tint); }
+.pm-media img, .pm-media svg { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pm-body { padding: 22px 24px 26px; }
+.pm-cat { display: inline-block; font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; color: var(--brand-dark); font-weight: 700; }
+.pm-body h3 { margin: 6px 0 6px; font-size: 1.5rem; }
+.pm-desc { color: var(--muted); margin: 0 0 18px; }
+.pm-field { margin-bottom: 15px; }
+.pm-field > label { display: block; font-size: .82rem; font-weight: 700; margin-bottom: 7px; color: var(--ink); }
+.pm-field > label span { color: var(--muted); font-weight: 400; }
+.pm-field input, .pm-field textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); font: inherit; background: var(--bg); }
+.pm-field input:focus, .pm-field textarea:focus { outline: 2px solid var(--brand-soft); border-color: var(--brand); }
+.pm-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.pm-chip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 7px 14px; font: inherit; font-size: .88rem; cursor: pointer; color: var(--ink); transition: background .12s ease, color .12s ease, border-color .12s ease; }
+.pm-chip:hover { border-color: var(--brand); }
+.pm-chip.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+.pm-foot { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 20px; border-top: 1px solid var(--line); padding-top: 16px; }
+.pm-price { font-family: var(--font-head); font-size: 1.6rem; color: var(--brand-dark); }
