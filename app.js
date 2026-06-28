@@ -465,6 +465,8 @@ async function loadHeroImages() {
   if (heroDotsEl) heroDotsEl.querySelectorAll("button").forEach((d, di) => d.addEventListener("click", () => setHero(di)));
   setHero(0);
 }
+document.getElementById("heroPrev")?.addEventListener("click", () => setHero(heroIndex - 1));
+document.getElementById("heroNext")?.addEventListener("click", () => setHero(heroIndex + 1));
 
 // --- Mobile nav + misc -------------------------------------------------
 const navToggle = document.getElementById("navToggle");
