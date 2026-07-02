@@ -3,8 +3,9 @@
    ---------------------------------------------------------------------
    To personalise for a client:
    • Replace the PRODUCTS array (names, prices, categories, stock, image).
-   • Swap the inline SVG placeholders for real photos: set product.image
-     to a path like "assets/rose-bouquet.jpg" and it will be used instead.
+   • Demo photos are pinned Pexels shots (PEXELS_PHOTOS below) so they load
+     instantly. Set product.image to a path like "assets/rose-bouquet.jpg"
+     (your Canon photos) and it will be used instead.
    • Live payments: see placeOrder() — drop in a Stripe Payment Link or
      PayPal button where indicated.
    ===================================================================== */
@@ -20,10 +21,6 @@ const SHOP = {
   // the client the full order details. Leave as-is in the demo.
   web3formsKey: "YOUR_WEB3FORMS_ACCESS_KEY",
   paypalLink: "https://www.paypal.com/paypalme/yourbusiness", // ← client's PayPal.Me / Payment Link
-  // Free demo photos via Pexels. Get your own key at https://www.pexels.com/api/
-  // These are PLACEHOLDERS — set a product's `image:` field to a real Canon photo
-  // (e.g. "assets/rose-bouquet.jpg") to override Pexels per product.
-  pexelsKey: "4SuTxTJkprUsJAP1CZoSkd412wKx4EuXt7xfK5HzZf9DreiCe8Wv0twm",
 };
 
 // --- Product catalogue ------------------------------------------------
@@ -41,6 +38,29 @@ const PRODUCTS = [
   { id: "birthday-bright",name: "Birthday Brights",    cat: "Occasions",  price: 52, stock: 9,  desc: "A cheerful mix of seasonal colour.",                    hue: 280, query: "colorful flower bouquet" },
   { id: "lavender-dream", name: "Lavender Dream",      cat: "Bouquets",   price: 46, stock: 7,  desc: "Fragrant lavender, lisianthus, and stock.",             hue: 265, query: "lavender flowers" },
 ];
+
+// --- Demo photos: pinned Pexels shots, keyed by each item's `query` -----
+// Direct image URLs load with the page — no API call, no key, no pop-in.
+// To change a photo: browse pexels.com, copy the image address, paste here.
+const PEXELS_PHOTOS = {
+  "red roses bouquet": { u: "https://images.pexels.com/photos/11196806/pexels-photo-11196806.jpeg", p: "Shameel mukkath" },
+  "tulips bouquet": { u: "https://images.pexels.com/photos/20155225/pexels-photo-20155225.jpeg", p: "Alina Zahorulko" },
+  "sunflower bouquet": { u: "https://images.pexels.com/photos/13368214/pexels-photo-13368214.jpeg", p: "Sami  Aksu" },
+  "pink peonies vase": { u: "https://images.pexels.com/photos/37805067/pexels-photo-37805067.jpeg", p: "David Kanigan" },
+  "white lily arrangement": { u: "https://images.pexels.com/photos/8865105/pexels-photo-8865105.jpeg", p: "RDNE Stock project" },
+  "potted succulents": { u: "https://images.pexels.com/photos/36620948/pexels-photo-36620948.jpeg", p: "Natalia Sevruk" },
+  "peace lily plant": { u: "https://images.pexels.com/photos/8297857/pexels-photo-8297857.jpeg", p: "Mikhail Nilov" },
+  "white flower arrangement": { u: "https://images.pexels.com/photos/20199364/pexels-photo-20199364.jpeg", p: "alirezamani wedding team" },
+  "colorful flower bouquet": { u: "https://images.pexels.com/photos/31497181/pexels-photo-31497181.jpeg", p: "ilayda 0700" },
+  "lavender flowers": { u: "https://images.pexels.com/photos/128883/lavender-flowers-purple-flowers-blue-flowers-128883.jpeg", p: "Pixabay" },
+  "tulips colorful field": { u: "https://images.pexels.com/photos/16318392/pexels-photo-16318392.jpeg", p: "Engin Sezer" },
+  "pink peonies": { u: "https://images.pexels.com/photos/8893073/pexels-photo-8893073.jpeg", p: "Dagmara Dombrovska" },
+  "sunflowers field": { u: "https://images.pexels.com/photos/29278365/pexels-photo-29278365.jpeg", p: "Yavuz Solgun" },
+  "colorful flower arrangement": { u: "https://images.pexels.com/photos/16935921/pexels-photo-16935921.jpeg", p: "Matheus Bertelli" },
+  "florist arranging bouquet": { u: "https://images.pexels.com/photos/5409690/pexels-photo-5409690.jpeg", p: "Amina Filkins" },
+};
+// Size an image via Pexels CDN params (w = target width in px)
+const px = (u, w) => `${u}?auto=compress&cs=tinysrgb&w=${w}`;
 
 const fmt = (n) => SHOP.currency + n.toFixed(2);
 const esc = (s = "") => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -61,15 +81,13 @@ function flowerSVG(hue) {
   </svg>`;
 }
 // --- Product imagery: real photo if available, else SVG fallback ------
-// Priority: explicit product.image (your Canon photos) > cached Pexels photo > SVG.
-const IMG_CACHE_KEY = "bloomco_imgcache";
-let imgCache = JSON.parse(localStorage.getItem(IMG_CACHE_KEY) || "{}"); // { id: {url, photographer} }
-const productImage = (p) => p.image || imgCache[p.id]?.url || null;
+// Priority: explicit product.image (your Canon photos) > pinned Pexels photo > SVG.
+const productImage = (p) => p.image || (PEXELS_PHOTOS[p.query] ? px(PEXELS_PHOTOS[p.query].u, 640) : null);
 
 function productMedia(p) {
   const url = productImage(p);
-  const credit = imgCache[p.id]?.photographer;
-  if (url) return `<img src="${esc(url)}" alt="${esc(p.name)}"${credit ? ` title="Photo: ${esc(credit)} / Pexels"` : ""} loading="lazy">`;
+  const credit = !p.image && PEXELS_PHOTOS[p.query]?.p;
+  if (url) return `<img src="${esc(url)}" alt="${esc(p.name)}"${credit ? ` title="Photo: ${esc(credit)} / Pexels"` : ""} loading="lazy" onerror="this.outerHTML = flowerSVG(${p.hue})">`;
   return flowerSVG(p.hue);
 }
 
@@ -77,35 +95,6 @@ function stockTag(p) {
   if (p.stock === 0) return `<span class="stock-tag out">Sold out</span>`;
   if (p.stock <= 3) return `<span class="stock-tag low">Only ${p.stock} left</span>`;
   return `<span class="stock-tag">In stock</span>`;
-}
-
-// Fetch a placeholder photo per product from Pexels, cache it, and swap it in
-// over the SVG once loaded. Gracefully no-ops if offline or the API fails.
-async function hydratePexelsImages() {
-  // Fetch all product photos in PARALLEL so they appear together in ~1s
-  // instead of trickling in one-by-one over many seconds.
-  await Promise.all(PRODUCTS.map(async (p) => {
-    if (productImage(p)) return; // already have a Canon photo or cached one
-    try {
-      const res = await fetch(
-        `https://api.pexels.com/v1/search?query=${encodeURIComponent(p.query)}&per_page=1&orientation=landscape`,
-        { headers: { Authorization: SHOP.pexelsKey } }
-      );
-      if (!res.ok) return;
-      const photo = (await res.json()).photos?.[0];
-      if (!photo) return;
-      // medium (~350px) is plenty for a card and a fraction of large's weight
-      imgCache[p.id] = { url: photo.src.medium, photographer: photo.photographer };
-      localStorage.setItem(IMG_CACHE_KEY, JSON.stringify(imgCache));
-      updateCardMedia(p);
-    } catch (_) { /* keep the SVG fallback */ }
-  }));
-  updateCartUI(); // refresh any cart thumbnails with the new photos
-}
-
-function updateCardMedia(p) {
-  const el = document.querySelector(`.product-media[data-id="${p.id}"]`);
-  if (el) el.innerHTML = productMedia(p) + stockTag(p);
 }
 
 // --- Cart state (persisted) -------------------------------------------
@@ -434,35 +423,26 @@ document.querySelectorAll(".badge[data-target]").forEach((b) => {
 
 // === Hero background carousel ===========================================
 const HERO_BG = [
-  { key: "hero-roses", query: "red roses bouquet" },
-  { key: "hero-tulips", query: "tulips colorful field" },
-  { key: "hero-peony", query: "pink peonies" },
-  { key: "hero-sunflower", query: "sunflowers field" },
-  { key: "hero-mixed", query: "colorful flower arrangement" },
+  { query: "red roses bouquet" },
+  { query: "tulips colorful field" },
+  { query: "pink peonies" },
+  { query: "sunflowers field" },
+  { query: "colorful flower arrangement" },
 ];
 let heroIndex = 0;
 const heroEl = document.querySelector(".hero");
 const heroDotsEl = document.getElementById("heroDots");
 function setHero(i) {
   heroIndex = (i + HERO_BG.length) % HERO_BG.length;
-  const url = imgCache[HERO_BG[heroIndex].key]?.url;
-  if (url) heroEl.style.backgroundImage = `linear-gradient(rgba(34,18,28,.5), rgba(34,18,28,.62)), url("${url}")`;
+  const photo = PEXELS_PHOTOS[HERO_BG[heroIndex].query];
+  if (photo) heroEl.style.backgroundImage = `linear-gradient(rgba(34,18,28,.5), rgba(34,18,28,.62)), url("${px(photo.u, 1600)}")`;
   if (heroDotsEl) heroDotsEl.querySelectorAll("button").forEach((d, di) => d.classList.toggle("active", di === heroIndex));
 }
-async function loadHeroImages() {
-  if (heroDotsEl) heroDotsEl.innerHTML = HERO_BG.map((_, i) => `<button aria-label="Show background ${i + 1}"></button>`).join("");
-  await Promise.all(HERO_BG.map(async (h) => {
-    if (imgCache[h.key]?.url) return;
-    try {
-      const res = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(h.query)}&per_page=1&orientation=landscape`, { headers: { Authorization: SHOP.pexelsKey } });
-      if (!res.ok) return;
-      const photo = (await res.json()).photos?.[0];
-      if (!photo) return;
-      imgCache[h.key] = { url: photo.src.large };
-      localStorage.setItem(IMG_CACHE_KEY, JSON.stringify(imgCache));
-    } catch (_) {}
-  }));
-  if (heroDotsEl) heroDotsEl.querySelectorAll("button").forEach((d, di) => d.addEventListener("click", () => setHero(di)));
+function initHero() {
+  if (heroDotsEl) {
+    heroDotsEl.innerHTML = HERO_BG.map((_, i) => `<button aria-label="Show background ${i + 1}"></button>`).join("");
+    heroDotsEl.querySelectorAll("button").forEach((d, di) => d.addEventListener("click", () => setHero(di)));
+  }
   setHero(0);
 }
 document.getElementById("heroPrev")?.addEventListener("click", () => setHero(heroIndex - 1));
@@ -492,9 +472,16 @@ function toast(msg) {
 
 document.getElementById("year").textContent = new Date().getFullYear();
 
+// --- About photo (swap for a real photo of the shop / owner) -----------
+function renderAboutPhoto() {
+  const el = document.querySelector(".about-art");
+  const photo = PEXELS_PHOTOS["florist arranging bouquet"];
+  if (el && photo) el.innerHTML = `<img src="${px(photo.u, 900)}" alt="Florist hand-tying a fresh bouquet" title="Photo: ${esc(photo.p)} / Pexels" loading="lazy">`;
+}
+
 // --- Init --------------------------------------------------------------
 renderFilters();
 renderGrid();
 updateCartUI();
-hydratePexelsImages(); // swap SVG placeholders for real Pexels flower photos
-loadHeroImages();      // hero background photo + clickable carousel
+initHero();        // hero background photo + clickable carousel
+renderAboutPhoto();
