@@ -456,6 +456,12 @@ navToggle.addEventListener("click", () => {
   navToggle.setAttribute("aria-expanded", open);
 });
 navLinks.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => navLinks.classList.remove("open")));
+document.addEventListener("click", (e) => {
+  if (navLinks.classList.contains("open") && !navLinks.contains(e.target) && !navToggle.contains(e.target)) {
+    navLinks.classList.remove("open");
+    navToggle.setAttribute("aria-expanded", "false");
+  }
+});
 
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") { closeCart(); closeCheckout(); closeProductModal(); closeCustomModal(); }
